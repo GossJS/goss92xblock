@@ -10,7 +10,7 @@ from xblock.scorable import ScorableXBlockMixin, Score
 from xblock.fields import Integer, Scope, UNSET
 from django.utils.safestring import SafeText
 import textwrap
-import urllib.request
+import urllib
 import json
 import random
 
@@ -85,10 +85,10 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         CURRENT = xb_user.opt_attrs.get('edx-platform.username')
 
         XURL = 'https://fork.kodaktor.ru/testxblock2'
-        response = urllib.request.urlopen(XURL)
+        response = urllib.urlopen(XURL)
         www = response.read()
-        encoding = response.info().get_content_charset('utf-8')
-        data = json.loads(www.decode(encoding))
+         
+        data = json.loads(response.read())
         CHECK = data['message']
 
         html = self.resource_string("static/html/gossxblock.html")
