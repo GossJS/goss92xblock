@@ -85,9 +85,7 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         CURRENT = xb_user.opt_attrs.get('edx-platform.username')
 
         XURL = 'https://fork.kodaktor.ru/testxblock2'
-        response = urllib.urlopen(XURL)
-        www = response.read()
-         
+        response = urllib.urlopen(XURL)         
         data = json.loads(response.read())
         CHECK = data['message']
 
