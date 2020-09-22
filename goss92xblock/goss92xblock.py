@@ -1,4 +1,4 @@
-"""TO-DO: Write a description of what this XBlock is."""
+"""This XBlock by Goss allows to send data for automatic check and grade the result."""
 
 import pkg_resources
 from web_fragments.fragment import Fragment
@@ -10,9 +10,15 @@ from xblock.scorable import ScorableXBlockMixin, Score
 from xblock.fields import Integer, Scope, UNSET
 from django.utils.safestring import SafeText
 import textwrap
-import urllib
 import json
+import sys
 import random
+
+if sys.version_info.major >= 3:
+    from urllib.request import urlopen
+else:
+    from urllib import urlopen
+    
 
 @XBlock.wants('user')
 class Goss92XBlock(ScorableXBlockMixin, XBlock):
@@ -85,8 +91,17 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         CURRENT = xb_user.opt_attrs.get('edx-platform.username')
 
         XURL = 'https://fork.kodaktor.ru/testxblock2'
-        response = urllib.urlopen(XURL)         
-        data = json.loads(response.read())
+
+        if sys.version_info.major >= 3:
+            response = urlopen(XURL)
+            encoding = response.info().get_content_charset('utf-8')
+            json_data = response.read().decode(encoding)
+        else:
+            json_data = urlopen(XURL).read()
+            
+        data = json.loads(json_data)
+        
+        
         CHECK = data['message']
 
         html = self.resource_string("static/html/gossxblock.html")
