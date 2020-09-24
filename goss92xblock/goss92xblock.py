@@ -108,7 +108,7 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         frag = Fragment(html.format(self=self))
 
         res = textwrap.dedent("""
-            <h2>X4a: Server app challenge</h2>
+            <h2>X92-a: Server app challenge</h2>
             <p>Your server app URL should return this: <span id="gosscurrent">{}</span>!</h2>
             <p>The address {} returned {}</h2>
             <div>Enter URL: <input id='gossinput' /><br/>
