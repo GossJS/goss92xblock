@@ -14,6 +14,9 @@ import json
 import sys
 import random
 
+import hashlib
+import codecs
+
 if sys.version_info.major >= 3:
     from urllib.request import urlopen
 else:
@@ -106,13 +109,27 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
             html_data = response.read().decode(encoding)
         else:
             html_data = urlopen(HTMLURL).read()
-
+        
         res = textwrap.dedent(html_data)
         frag.add_content(SafeText(res))
+        
+        css_filename = "static/css/gossxblock.css"
+        js_filename = "static/js/src/goss92xblock.js"
+        
+        css_file = codecs.open(css_filename, mode='r', encoding=None, errors='strict', buffering=-1)
+        js_file = codecs.open(js_filename, mode='r', encoding=None, errors='strict', buffering=-1)
+        
+        css_file_data = css_file.read()
+        js_file_data = js_file.read()
+        
+        css_md5_hash = hashlib.md5(css_file_data.encode('utf-8'))
+        js_md5_hash = hashlib.md5(js_file_data.encode('utf-8'))
 
+        css_version = css_md5_hash.hexdigest()
+        js_version = js_md5_hash.hexdigest()
 
-        frag.add_css(self.resource_string("static/css/gossxblock.css"))
-        frag.add_javascript(self.resource_string("static/js/src/goss92xblock.js"))
+        frag.add_css(self.resource_string(css_filename+"?ver="+css_version))
+        frag.add_javascript(self.resource_string(js_filename+"?ver="+js_version))
         frag.initialize_js('Goss92XBlock')
         return frag 
 
