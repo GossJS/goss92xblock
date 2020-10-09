@@ -126,7 +126,7 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         js_md5_hash = hashlib.md5(js_file_data.encode('utf-8'))
 
         css_version = css_md5_hash.hexdigest()
-        js_version = css_md5_hash.hexdigest()
+        js_version = js_md5_hash.hexdigest()
 
         frag.add_css(self.resource_string(css_filename+"?ver="+css_version))
         frag.add_javascript(self.resource_string(js_filename+"?ver="+js_version))
