@@ -105,7 +105,7 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
             encoding = response.info().get_content_charset('utf-8')
             html_data = response.read().decode(encoding)
         else:
-            html_data = urlopen(HTMLURL).read()
+            html_data = urlopen(HTMLURL).read().decode('utf-8')
 
         res = textwrap.dedent(html_data)
         frag.add_content(SafeText(res))
