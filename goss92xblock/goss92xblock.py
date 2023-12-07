@@ -110,11 +110,21 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         res = textwrap.dedent(html_data)
         frag.add_content(SafeText(res))
 
+        # course = store.get_course(self.location.course_key)
+        vertical = self.get_parent()
+        sequential = vertical.get_parent()
+        chapter = sequential.get_parent()
+
+        context = {
+            'vertical_name': vertical.display_name,
+            'sequential_name': sequential.display_name,
+            'chapter_name': chapter.display_name,
+        }
 
         frag.add_css(self.resource_string("static/css/gossxblock.css"))
         frag.add_javascript(self.resource_string("static/js/src/goss92xblock.js"))
-        frag.initialize_js('Goss92XBlock')
-        return frag 
+        frag.initialize_js('Goss92XBlock', context)
+        return frag
 
 
     @XBlock.json_handler
@@ -133,7 +143,7 @@ class Goss92XBlock(ScorableXBlockMixin, XBlock):
         self._publish_grade(Score(self.score2, self.max_score()))
 
 
-        return {"score": self.score2}        
+        return {"score": self.score2}
 
 
     # TO-DO: change this to create the scenarios you'd like to see in the
